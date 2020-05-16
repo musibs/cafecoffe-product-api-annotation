@@ -1,5 +1,7 @@
 package com.cafecoffe.product.api.model;
 
+import java.util.Objects;
+
 public class CoffeeEvent {
 
     private Long eventId;
@@ -19,6 +21,20 @@ public class CoffeeEvent {
 
     public String getEventType() {
         return eventType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CoffeeEvent)) return false;
+        CoffeeEvent that = (CoffeeEvent) o;
+        return Objects.equals(getEventId(), that.getEventId()) &&
+                Objects.equals(getEventType(), that.getEventType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getEventId(), getEventType());
     }
 
     @Override

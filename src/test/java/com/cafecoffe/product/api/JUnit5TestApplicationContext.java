@@ -4,14 +4,14 @@ import com.cafecoffe.product.api.controller.CoffeeController;
 import com.cafecoffe.product.api.model.Coffee;
 import com.cafecoffe.product.api.model.CoffeeEvent;
 import com.cafecoffe.product.api.repository.CoffeeRepository;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.test.StepVerifier;
@@ -20,9 +20,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
-class CafeCoffeeProductApiAnnotationApplicationTests {
+public class JUnit5TestApplicationContext {
 
     private WebTestClient webTestClient;
     private List<Coffee> expectedCoffeeList;
@@ -30,10 +30,13 @@ class CafeCoffeeProductApiAnnotationApplicationTests {
     @Autowired
     private CoffeeRepository coffeeRepository;
 
-    @Before
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @BeforeEach
     void beforeEach() {
         this.webTestClient = WebTestClient
-                .bindToController(new CoffeeController(coffeeRepository))
+                .bindToApplicationContext(applicationContext)
                 .configureClient()
                 .baseUrl("/coffees")
                 .build();
@@ -95,4 +98,6 @@ class CafeCoffeeProductApiAnnotationApplicationTests {
                 .thenCancel()
                 .verify();
     }
+
+
 }

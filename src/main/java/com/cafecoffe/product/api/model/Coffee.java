@@ -12,6 +12,8 @@ public class Coffee {
     private String name;
     private double price;
 
+    public Coffee() {}
+
     public Coffee(String id, String name, double price) {
         this.id = id;
         this.name = name;
