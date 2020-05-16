@@ -1,12 +1,17 @@
 package com.cafecoffe.product.api.controller;
 
 import com.cafecoffe.product.api.model.Coffee;
+import com.cafecoffe.product.api.model.CoffeeEvent;
 import com.cafecoffe.product.api.repository.CoffeeRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 
 @RestController
 @RequestMapping("/coffees")
@@ -61,5 +66,11 @@ public class CoffeeController {
     @DeleteMapping
     public Mono<Void> deleteProducts() {
         return coffeeRepository.deleteAll();
+    }
+
+    @GetMapping(value = "/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<CoffeeEvent> getCoffeeEvents() {
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(id -> new CoffeeEvent(id, "New Coffee Event"));
     }
 }
